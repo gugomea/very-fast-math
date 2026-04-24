@@ -4547,6 +4547,7 @@ std::vector<std::string> vfm::CppParser::processTemplateOptions(const std::strin
    auto options_raw{ StaticHelper::removeWhiteSpace(
    StaticHelper::replaceAll(split.at(0), NATIVE_SMV_ENV_MODEL_DENOTER_OPEN, "")) };
    addNote("Processing template options '" + options_raw + "'.");
+   // options_raw = std::string("G,ALLOW_ZEROLENGTH_SECTIONS=false,ANGLEGRANULARITY=45,ANGLE_BASED_LC=false,BMC_CNT=100,BMC_NUMBER_OF_CEXS=1,CALCULATE_CENTER_GAP=false,CALCULATE_LEFT_GAP=false,CALCULATE_RIGHT_GAP=false,CALCULATE_RIGHT_GAP_REAR=false,CONCRETE_MODEL=true,DEBUG=false,DISTANCESCALING=1000,EGOLESS=false,FEASIBILITY=false,INITPOSRANGENONEGOS=300,KEEP_EGO_FROM_GREEN=true,LANES_MAX_SPEEDS=$120E0N0R0F12120E0N0S0F12120E0N0T0F12,LANES_MIN_SPEEDS=$120E0M0F12120E0N0F12120E0O0F12,LANE_WIDTH=400,LATERAL_LC_GRANULARITY=3,LTL_MODE=false,MAXACCELEGO=3,MAXACCELNONEGO=3,MAXDISTCONNECTIONS=40,MAXOUTGOINGCONNECTIONS=3,MINACCELEGO=-8,MINACCELNONEGO=-8,MINDISTCONNECTIONS=20,MIN_TIME_BETWEEN_LANECHANGES=1,NONEGOS=5,NUMLANES=2,SCENGEN_EXISTENTIAL_PROPERTIES=$0N0J0V,SCENGEN_MODE=false,SCENGEN_UNIVERSAL_PROPERTIES=$0M0J0M,SECTIONS=1,SECTIONSMAXLENGTH=300,SECTIONSMINLENGTH=100,SEGMENTS=1,SEGMENTSMINLENGTH=10,SIMPLE_LC=true,SPEC=$1b1g1o131k1l1i17150w0x0E0E0E0E0E1D1M1U0K1U1D1G1x1x1x0S0M0V1x1x1x0K1z1A1R1x1O1N1R0w0Z0w1D1M1U0K1U1D1G1x1x1x0S0N0V1x1x1x0K1z1A1R1x1O1N1R0F0w0C0w0E1D1M1U0K1U1D1G1x1x1x0S0M0V1x1x1x0K1z1A1R1x1O1N1R0w0Z0w1D1M1U0K1U1D1G1x1x1x0S0O0V1x1x1x0K1z1A1R1x1O1N1R0F0F0w0C0w0E1D1M1U0K1U1D1G1x1x1x0S0M0V1x1x1x0K1z1A1R1x1O1N1R0w0Z0w1D1M1U0K1U1D1G1x1x1x0S0P0V1x1x1x0K1z1A1R1x1O1N1R0F0F0w0C0w0E1D1M1U0K1U1D1G1x1x1x0S0M0V1x1x1x0K1z1A1R1x1O1N1R0w0Z0w1D1M1U0K1U1D1G1x1x1x0S0Q0V1x1x1x0K1z1A1R1x1O1N1R0F0F0F0X,SPEC1=$1b1g1o131k1l1i17150w180E0E1D1M1U0K1B1M1S0w0Z0w0N0F0F0X,SPEC2=$1b1g1o131k1l1i17150w180E0E1D1M1U0K1B1M1S0w0Z0w0O0F0F0X,SPEC3=$1b1g1o131k1l1i17150w180E0E1D1M1U0K1B1M1S0w0Z0w0P0F0F0X,SPEC4=$1b1g1o131k1l1i17150w180E0E1D1M1U0K1B1M1S0w0Z0w0R0F0F0X,SPEC5=$1b1g1o131k1l1i17150w180E0E1D1M1U0K1B1M1S0w0Z0w0S0F0F0X,SPEC6=$1b1g1o131k1l1i17150w180E0E1D1M1U0K1B1M1S0w0Z0w0T0F0F0X,SPEC7=$1b1g1o131k1l1i17150w180E0E1D1M1U0K1B1M1S0w0Z0w0U0F0F0X,SPEC8=$1b1g1o131k1l1i17150w180E0E1D1M1U0K1B1M1S0w0Z0w0V0F0F0X,SPEC9=$1b1g1o131k1l1i17150w180E0E1D1M1U0K1B1M1S0w0Z0w0N0M0F0F0X,ShowLOG=true,TIMESCALING=1000,VEHICLE_LENGTH=5,VEHICLE_WIDTH=155,_BP_INCLUDES_FILE_PATH=$0K0K0L1R1Q1B0L1D1W1z1L1O1K1D1R0L1D1F1N1x1K1D1R1R0L1U1E1L0J1H1M1B1K1T1C1D1R0K1S1W1S,_CACHED_PATH=$0K0K0L1D1W1z1L1O1K1D1R0L1S1L1O,_ENVMODEL_PATH=$0K0K0L1R1Q1B0L1S1D1L1O1K1z1S1D1R,_EXTERNAL_PATH=$0K0K0L1D1W1S1D1Q1M1z1K,_GENERATED_PATH=$0K0K0L1D1W1z1L1O1K1D1R0L1F1O");
 
    auto options{ StaticHelper::split(
       options_raw,
@@ -6027,6 +6028,9 @@ bool vfm::CppParser::performCodeGenerationAndMCCodeCreation(
    const char* target_path_for_generated_code, 
    const bool create_live_pdf)
 {
+    printf("path_to_file_list_file_code: %s\n", path_to_file_list_file_code);
+    printf("path_to_file_list_file_env_model: %s\n", path_to_file_list_file_env_model);
+    printf("target_path_for_generated_code: %s\n", target_path_for_generated_code);
    std::string target_path_for_env_model(target_path_for_generated_code);
    target_path_for_env_model += "_envmodel.cpp";
 
@@ -6169,7 +6173,16 @@ bool performFSMCodeGeneration(
    printVfmIntro(cppp, std::string(target_path_for_generated_code));
 
    std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
-   bool result = cppp.performCodeGenerationAndMCCodeCreation(path_to_file_list_file_code, path_to_file_list_file_env_model, target_path_for_generated_code, CREATE_LIVE_PDF);
+   printf("cmd: %s\n", command_line_argument);
+   printf("0: %s\n", path_to_file_list_file_code);
+   printf("1: %s\n", path_to_file_list_file_env_model);
+   printf("2: %s\n", target_path_for_generated_code);
+   bool result = cppp.performCodeGenerationAndMCCodeCreation(
+           path_to_file_list_file_code,
+           path_to_file_list_file_env_model,
+           target_path_for_generated_code,
+           CREATE_LIVE_PDF
+   );
    std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
    
    printVfmOutro(result, cppp, end - begin);
